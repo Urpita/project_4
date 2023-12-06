@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Adding little styling for the to-do list */
+        body {
+          font-family: 'Arial', sans-serif;
+          background-color: #f4f4f4;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+         /* to-do list  */
+        #todo-container {
+          width: 300px;
+          background-color: #fff;
+          border-radius: 8px;
+          padding: 20px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          
+        }
+        /* task list */
+    
+        #task-list {
+          list-style: none;
+          padding: 0;
+        }
+    
+        .task-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid #ccc;
+          margin-bottom: 10px;
+          padding-bottom: 5px;
+        }
+    
+        #history {
+          margin-top: 20px;
+        }
+        .inactive {
+            display: none;
+        }
+        /* history page */
+        #history{
+            margin: 50px;
+            width: 300px;
+           padding: 10px;
+            background-color: rgb(41, 44, 233) ;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+            height: 250px;
+            font-weight: bold;
+            color: #ccc;
+        }
+        /* Add and history button */
+        .btnn{
+            padding: 15px;
+            background-color: rgb(225, 159, 171);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin: 20px;
+            margin-top: -13;
+            border-color: transparent;
+        
+        }
+        
+        /* task and time  inputs */
+        input{
+            margin: 5px;
+            padding: 6.5px;
+            border-radius: 10px;
+            background-color: rgb(139, 140, 216);
+            color: black;
+            border-color: transparent;
+        }
+        /* Addtask button */
+        .bt{
+            padding: 5px;
+            border-radius: 5px;
+            background-color: rgb(62, 62, 198);
+            margin: 5px;
+            border-color: transparent;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body style="background-image: url(bg_image.jpg) ; width: 100%;">
+    <!-- Adding add and history button -->
+    <div class="add">
+        <button class="btnn" onclick="add()">ADD</button>
+        <button class="btnn hs_btn" onclick="hist()">History</button>
+    </div>
+    <!-- adding to-do list -->
+    <div id="todo-container" class="container inactive ">
+        <h2>To-Do List</h2>
+    
+        <div>
+            <!-- Add input for task and time -->
+            <div class="row">
+                <div class="col-sm">
+                    <label for="task">Task:</label>
+                    <input type="text" id="task" placeholder="Enter task">
+                </div>
+                <div class="col-sm">
+                    <label for="time">Time:</label>
+                    <input type="time" id="time" placeholder="set time">
+                
+                </div>
+            </div>
+            <!-- Adding add task button -->
+            <button class="bt" onclick="addTask()">Add Task</button>
+    
+        </div>
+        <!-- showing the list of the task  that added -->
+        <ul id="task-list"></ul>
+    </div><br><br>
+         <!-- Adding a history box -->
+    <div id="history" class="inactive">
+        <h3>History</h3>
+        <ul id="history-list"></ul>
+      </div>
+    <script>
+        const btnn = document.getElementsByClassName("btnn")[0];
+        const td_container = document.querySelector('#todo-container');
+        const taskList = document.getElementById('task-list');
+    const historyList = document.getElementById('history-list');
+        const hs_btn=document.getElementsByClassName('hs_btn');
+      const history =document.getElementById('history');
+    let taskIdCounter=0;
+        //    Add function for add button
+         function add() {
+            td_container.classList.remove("inactive");
+            btnn.classList.add("inactive");
+           
+         }
+        //  add function for history button
+         function hist(){
+            history.classList.remove("inactive");
+            hs_btn.classList.add("inactive");
+         }
+
+            //  function for add task button
+    function addTask() {
+            const taskInput = document.getElementById('task');
+            const timeInput = document.getElementById('time');
+
+            const task = taskInput.value.trim();
+            const time = timeInput.value.trim();
+
+            if (task && time) {
+                const taskId = taskIdCounter++;
+                const taskItem = document.createElement('li');
+                taskItem.className = 'task-item';
+                taskItem.setAttribute('data-task-id', taskId);
+                taskItem.innerHTML = `
+                    <span>${task}</span>
+                    <span>${time}</span>
+                    
+                    <button onclick="deleteTask(${taskId})" style="background-color:rgb(139, 140, 216); padding:4px; border-radius:4px; border-color:transparent;">Delete</button>
+                    <i class="fa-solid fa-bell"></i>
+                `;
+                taskList.appendChild(taskItem);
+
+                const historyItem = document.createElement('li');
+                historyItem.setAttribute('data-task-id', taskId);
+                historyItem.textContent = `${task} - ${time}`;
+                historyList.appendChild(historyItem);
+
+                // Clear input fields
+                taskInput.value = '';
+                timeInput.value = '';
+            }
+        }
+            // add function for deletw button
+        function deleteTask(taskId) {
+            // Remove task from task list
+            const taskItem = document.querySelector(`.task-item[data-task-id="${taskId}"]`);
+            taskItem.remove();
+
+            // Remove task from history list
+            const historyItem = document.querySelector(`#history-list li[data-task-id="${taskId}"]`);
+            historyItem.remove();
+        }
+
+        // add reminder
+
+
+       
+    </script>
+</body>
+</html>
